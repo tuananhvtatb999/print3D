@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="base-path" content=".">
+
+  <!-- SEO -->
+  <title>PRINT3D — Mô Hình In 3D Chất Lượng Cao</title>
+  <meta name="description" content="Bộ sưu tập mô hình in 3D đa dạng: móc khóa, chậu cây, đồ chơi, trang trí, hộp đựng. Đặt in theo yêu cầu, giao hàng toàn quốc.">
+  <meta name="keywords" content="in 3D, mô hình in 3D, PLA, móc khóa in 3D, chậu cây in 3D, đặt in 3D">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="PRINT3D — Mô Hình In 3D Chất Lượng Cao">
+  <meta property="og:description" content="Khám phá bộ sưu tập mô hình in 3D độc đáo. Đặt in theo yêu cầu.">
+  <meta property="og:type" content="website">
+
+  <!-- Favicon placeholder -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⬡</text></svg>">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Preconnect Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+
+<body>
+
+  <!-- ============================
+       HEADER
+       ============================ -->
+  <header id="header" role="banner">
+    <div class="header-inner">
+      <a href="#" class="logo" aria-label="PRINT3D — Trang chủ">
+        <div class="logo-icon" aria-hidden="true">⬡</div>
+        <div class="logo-text">
+          <span class="logo-name">PRINT3D</span>
+          <span class="logo-tag">Mô hình in 3D</span>
+        </div>
+      </a>
+      <div class="header-spacer"></div>
+      <a href="#footer" class="header-cta">📬 Liên hệ đặt in</a>
+      <button id="admin-toggle" aria-label="Đăng nhập Admin" title="Admin">⚙</button>
+    </div>
+  </header>
+
+  <!-- ============================
+       HERO
+       ============================ -->
+  <section id="hero" aria-label="Giới thiệu">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-grid-lines" aria-hidden="true"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot" aria-hidden="true"></span>
+        Nhận đặt in theo yêu cầu
+      </div>
+      <h1 class="hero-title">
+        MÔ HÌNH
+        <span class="accent-word">IN 3D</span>
+      </h1>
+      <p class="hero-subtitle">
+        Từ móc khóa cá nhân đến đồ trang trí độc bản — chúng tôi in mọi ý tưởng của bạn với chất liệu PLA, PETG chất lượng cao.
+      </p>
+      <div class="hero-stats" aria-label="Thống kê">
+        <div class="stat">
+          <div class="stat-num" aria-label="100 mô hình">100+</div>
+          <div class="stat-label">Mẫu thiết kế</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" aria-label="6 danh mục">6</div>
+          <div class="stat-label">Danh mục</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" aria-label="48 giờ giao hàng">48h</div>
+          <div class="stat-label">Giao hàng</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       MAIN CONTENT
+       ============================ -->
+  <main id="main" role="main">
+
+    <!-- Category navigation -->
+    <nav id="category-nav" aria-label="Danh mục mô hình">
+      <!-- Rendered by JS -->
+      <button class="cat-btn active" data-cat="all">
+        <span class="cat-icon" aria-hidden="true">⬡</span>
+        Đang tải...
+      </button>
+    </nav>
+
+    <!-- Section header -->
+    <div class="section-header">
+      <h2 class="section-title" id="section-label">Tất cả mô hình</h2>
+      <span class="section-count" id="item-count" aria-live="polite">—</span>
+    </div>
+
+    <!-- Model grid -->
+    <div
+      id="model-grid"
+      role="list"
+      aria-label="Danh sách mô hình"
+      aria-live="polite"
+    >
+      <!-- Rendered by JS -->
+    </div>
+
+  </main>
+
+  <!-- ============================
+       FOOTER
+       ============================ -->
+  <footer id="footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-logo">PRINT3D</div>
+      <p class="footer-sub">Chuyên sản xuất mô hình in 3D theo yêu cầu · Giao hàng toàn quốc</p>
+      <nav class="footer-links" aria-label="Liên kết footer">
+        <a href="mailto:hello@print3d.vn">📧 Email</a>
+        <a href="#">💬 Zalo</a>
+        <a href="#">📘 Facebook</a>
+        <a href="#">🛒 Shopee</a>
+      </nav>
+      <p class="footer-copy">© 2025 PRINT3D · Thiết kế tại Việt Nam 🇻🇳</p>
+    </div>
+  </footer>
+
+  <!-- ============================
+       LIGHTBOX
+       ============================ -->
+  <div
+    id="lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Xem chi tiết mô hình"
+    tabindex="-1"
+  >
+    <div class="lightbox-inner">
+      <div class="lightbox-img-wrap">
+        <img id="lb-img" src="" alt="" loading="lazy">
+        <button class="lightbox-close" id="lb-close" aria-label="Đóng">✕</button>
+      </div>
+      <div class="lightbox-body">
+        <div class="lightbox-cat" id="lb-cat"></div>
+        <h2 class="lightbox-name" id="lb-name"></h2>
+        <p class="lightbox-desc" id="lb-desc"></p>
+        <a href="#footer" class="lightbox-cta" id="lb-cta">
+          📬 Đặt in ngay
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================
+       LOGIN MODAL
+       ============================ -->
+  <div id="login-modal" role="dialog" aria-modal="true" aria-label="Đăng nhập Admin">
+    <div class="login-box">
+      <h3>ADMIN LOGIN</h3>
+      <form id="login-form" novalidate>
+        <div class="login-field">
+          <label for="login-user">Tài khoản</label>
+          <input id="login-user" name="username" type="text" autocomplete="username" required>
+        </div>
+        <div class="login-field">
+          <label for="login-pass">Mật khẩu</label>
+          <input id="login-pass" name="password" type="password" autocomplete="current-password" required>
+        </div>
+        <p class="login-error" id="login-error">Sai tài khoản hoặc mật khẩu.</p>
+        <div class="login-actions">
+          <button type="submit" class="btn-primary">Đăng nhập</button>
+          <button type="button" class="btn-ghost" id="login-cancel">Hủy</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================
+       ADMIN PANEL
+       ============================ -->
+  <aside id="admin-panel" aria-label="Admin Panel">
+    <div class="admin-header">
+      <h3>ADMIN</h3>
+      <div class="admin-header-right">
+        <span id="save-indicator" class="save-indicator"></span>
+        <button class="btn-ghost" id="admin-logout" style="font-size:0.75rem;padding:0.3rem 0.7rem;">Đăng xuất</button>
+      </div>
+    </div>
+
+    <!-- Folder status bar -->
+    <div id="folder-bar" class="folder-bar disconnected">
+      <span id="folder-bar-text">Chưa kết nối data/models.json</span>
+      <button id="connect-folder-btn" class="btn-connect">Kết nối</button>
+    </div>
+
+    <!-- Tabs -->
+    <nav class="admin-tabs" role="tablist">
+      <button class="admin-tab active" data-tab="categories" role="tab" aria-selected="true">Danh mục</button>
+      <button class="admin-tab" data-tab="products" role="tab" aria-selected="false">Sản phẩm</button>
+    </nav>
+
+    <!-- Tab: Danh mục -->
+    <div class="admin-tab-content active" id="tab-categories">
+      <div class="admin-section">
+        <form id="admin-cat-form" novalidate>
+          <div class="admin-field">
+            <label for="cf-icon">Icon (emoji)</label>
+            <input id="cf-icon" name="icon" type="text" placeholder="🆕" maxlength="4">
+          </div>
+          <div class="admin-field">
+            <label for="cf-label">Tên danh mục *</label>
+            <input id="cf-label" name="label" type="text" placeholder="VD: Mô hình xe" required>
+          </div>
+          <div class="admin-field">
+            <label for="cf-id">ID slug *</label>
+            <input id="cf-id" name="id" type="text" placeholder="VD: mo-hinh-xe" required>
+            <span class="field-hint">Chữ thường, không dấu, dùng dấu -</span>
+          </div>
+          <button type="submit" class="btn-primary" style="width:100%">+ Thêm danh mục</button>
+        </form>
+      </div>
+      <div class="admin-section" style="padding-top:0">
+        <h4 style="margin-bottom:0.6rem">Danh sách danh mục</h4>
+        <div id="admin-cat-list" class="admin-model-list"></div>
+      </div>
+    </div>
+
+    <!-- Tab: Sản phẩm -->
+    <div class="admin-tab-content" id="tab-products">
+      <div class="admin-section">
+
+        <form id="admin-add-form" novalidate>
+          <div class="admin-field">
+            <label for="af-name">Tên mô hình *</label>
+            <input id="af-name" name="name" type="text" placeholder="VD: Móc khóa Rồng" required>
+          </div>
+          <div class="admin-field">
+            <label for="af-cat">Danh mục *</label>
+            <select id="af-cat" name="category" required>
+              <option value="">-- Chọn danh mục --</option>
+            </select>
+          </div>
+          <div class="admin-field">
+            <label>Ảnh sản phẩm *</label>
+            <label class="file-pick-label" for="af-file-input">📁 Chọn ảnh từ máy</label>
+            <input id="af-file-input" type="file" accept="image/*" style="display:none">
+            <div id="af-preview" class="img-preview" style="display:none">
+              <img id="af-preview-img" src="" alt="preview">
+              <span id="af-preview-name" class="field-hint"></span>
+            </div>
+          </div>
+          <div class="admin-field">
+            <label for="af-desc">Mô tả *</label>
+            <textarea id="af-desc" name="description" placeholder="Mô tả ngắn về sản phẩm..." required></textarea>
+          </div>
+          <button type="submit" class="btn-primary" style="width:100%">+ Thêm sản phẩm</button>
+        </form>
+      </div>
+      <div class="admin-section" style="padding-top:0">
+        <h4 style="margin-bottom:0.6rem">Danh sách — <span id="admin-model-count">0</span> sản phẩm</h4>
+        <div id="admin-model-list" class="admin-model-list"></div>
+      </div>
+    </div>
+
+
+  </aside>
+
+  <!-- Back to top -->
+  <button id="back-top" aria-label="Về đầu trang" title="Về đầu trang">▲</button>
+
+  <!-- App script -->
+  <script src="js/app.js"></script>
+
+</body>
+</html>
