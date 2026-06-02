@@ -17,12 +17,18 @@
   const countEl   = document.getElementById('item-count');
   const sectionLbl = document.getElementById('section-label');
   const lightbox  = document.getElementById('lightbox');
-  const lbImg     = document.getElementById('lb-img');
+  const lbTrack   = document.getElementById('lb-track');
+  const lbDots    = document.getElementById('lb-dots');
+  const lbPrev    = document.getElementById('lb-prev');
+  const lbNext    = document.getElementById('lb-next');
   const lbCat     = document.getElementById('lb-cat');
   const lbName    = document.getElementById('lb-name');
   const lbDesc    = document.getElementById('lb-desc');
   const lbClose   = document.getElementById('lb-close');
   const backTop   = document.getElementById('back-top');
+
+  let currentSlide = 0;
+  let slideImages  = [];
 
   /* ─── Helpers ────────────────────────────── */
   function getCatLabel(catId) {
@@ -35,10 +41,13 @@
     return cat ? cat.icon : '⬡';
   }
 
-  function getImagePath(model) {
-    if (!model.image) return '';
-    if (model.image.startsWith('data:')) return model.image;
-    return `images/${model.category}/${model.image}`;
+  function getModelImages(model) {
+    if (Array.isArray(model.images) && model.images.length) return model.images;
+    if (model.image) {
+      const src = model.image.startsWith('data:') ? model.image : `images/${model.category}/${model.image}`;
+      return [src];
+    }
+    return [];
   }
 
   /* ─── Intersection Observer lazy load ───── */
@@ -132,7 +141,11 @@
 
     if (!imgObserver) imgObserver = initObserver();
 
-    grid.innerHTML = models.map((m, i) => `
+    grid.innerHTML = models.map((m, i) => {
+      const imgs = getModelImages(m);
+      const firstSrc = imgs[0] || '';
+      const countBadge = imgs.length > 1 ? `<span class="card-img-count">📷 ${imgs.length}</span>` : '';
+      return `
       <article
         class="model-card"
         data-id="${m.id}"
@@ -143,7 +156,7 @@
       >
         <div class="card-img-wrap img-loading">
           <img
-            data-src="${getImagePath(m)}"
+            data-src="${firstSrc}"
             alt="${m.name}"
             decoding="async"
           >
@@ -151,6 +164,7 @@
             <div class="zoom-icon">🔍</div>
           </div>
           <span class="card-cat-chip">${getCatIcon(m.category)} ${getCatLabel(m.category)}</span>
+          ${countBadge}
         </div>
         <div class="card-body">
           <h3 class="card-name">${m.name}</h3>
@@ -163,7 +177,7 @@
           </div>
         </div>
       </article>
-    `).join('');
+    `; }).join('');
 
     /* Attach click events */
     grid.querySelectorAll('.model-card').forEach(card => {
@@ -215,14 +229,38 @@
     renderModels(filtered);
   }
 
-  /* ─── Lightbox ───────────────────────────── */
+  /* ─── Lightbox slider ───────────────────── */
+  function goToSlide(i) {
+    currentSlide = i;
+    lbTrack.style.transform = `translateX(-${i * 100}%)`;
+    lbDots.querySelectorAll('.lb-dot').forEach((d, idx) => d.classList.toggle('active', idx === i));
+    lbPrev.hidden = i === 0;
+    lbNext.hidden = i === slideImages.length - 1;
+  }
+
   function openLightbox(model) {
-    lbImg.src  = getImagePath(model);
-    lbImg.alt  = model.name;
+    slideImages = getModelImages(model);
+
+    lbTrack.innerHTML = slideImages.map(src => `
+      <div class="lb-slide"><img src="${src}" alt="${model.name}" loading="lazy"></div>
+    `).join('');
+
+    if (slideImages.length > 1) {
+      lbDots.innerHTML = slideImages.map((_, i) =>
+        `<button class="lb-dot${i === 0 ? ' active' : ''}" aria-label="Ảnh ${i + 1}"></button>`
+      ).join('');
+      lbDots.querySelectorAll('.lb-dot').forEach((dot, i) =>
+        dot.addEventListener('click', () => goToSlide(i))
+      );
+    } else {
+      lbDots.innerHTML = '';
+    }
+
     lbCat.textContent  = `${getCatIcon(model.category)} ${getCatLabel(model.category)}`;
     lbName.textContent = model.name;
     lbDesc.textContent = model.description;
 
+    goToSlide(0);
     lightbox.classList.add('open');
     document.body.style.overflow = 'hidden';
     lbClose.focus();
@@ -233,6 +271,8 @@
     document.body.style.overflow = '';
   }
 
+  lbPrev.addEventListener('click', () => goToSlide(currentSlide - 1));
+  lbNext.addEventListener('click', () => goToSlide(currentSlide + 1));
   lbClose.addEventListener('click', closeLightbox);
 
   lightbox.addEventListener('click', (e) => {
@@ -240,7 +280,10 @@
   });
 
   document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('open')) return;
     if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft'  && currentSlide > 0)                    goToSlide(currentSlide - 1);
+    if (e.key === 'ArrowRight' && currentSlide < slideImages.length - 1) goToSlide(currentSlide + 1);
   });
 
   /* ─── Order / contact ────────────────────── */
@@ -320,12 +363,10 @@
   const adminCatForm     = document.getElementById('admin-cat-form');
   const adminCatList     = document.getElementById('admin-cat-list');
   const afFileInput      = document.getElementById('af-file-input');
-  const afPreview        = document.getElementById('af-preview');
-  const afPreviewImg     = document.getElementById('af-preview-img');
-  const afPreviewName    = document.getElementById('af-preview-name');
+  const afThumbnails     = document.getElementById('af-thumbnails');
 
-  let modelsFileHandle = null;
-  let pendingImageData = null;
+  let modelsFileHandle  = null;
+  let pendingImagesData = [];
 
   function isLoggedIn() {
     return sessionStorage.getItem(SESSION_KEY) === '1';
@@ -559,10 +600,10 @@
     const name = fd.get('name').trim();
     const cat  = fd.get('category');
     const desc = fd.get('description').trim();
-    if (!name || !cat || !pendingImageData || !desc) return;
+    if (!name || !cat || !pendingImagesData.length || !desc) return;
 
     const newId = allModels.length ? Math.max(...allModels.map(m => m.id)) + 1 : 1;
-    allModels.push({ id: newId, category: cat, name, description: desc, image: pendingImageData });
+    allModels.push({ id: newId, category: cat, name, description: desc, images: [...pendingImagesData] });
 
     const filtered = activeCategory === 'all'
       ? allModels
@@ -572,9 +613,8 @@
     autoSave();
 
     adminAddForm.reset();
-    afPreview.style.display = 'none';
-    afPreviewImg.src = '';
-    pendingImageData = null;
+    pendingImagesData = [];
+    renderAdminThumbs();
   });
 
   adminCatForm.addEventListener('submit', (e) => {
@@ -618,13 +658,30 @@
   }
 
   /* Image file picker */
+  function renderAdminThumbs() {
+    if (!pendingImagesData.length) { afThumbnails.innerHTML = ''; return; }
+    afThumbnails.innerHTML = pendingImagesData.map((src, i) => `
+      <div class="af-thumb">
+        <img src="${src}" alt="">
+        <button class="af-thumb-remove" data-i="${i}" aria-label="Xóa ảnh ${i + 1}">✕</button>
+      </div>
+    `).join('');
+    afThumbnails.querySelectorAll('.af-thumb-remove').forEach(btn =>
+      btn.addEventListener('click', () => {
+        pendingImagesData.splice(+btn.dataset.i, 1);
+        renderAdminThumbs();
+      })
+    );
+  }
+
   afFileInput.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    pendingImageData = await resizeToBase64(file);
-    afPreviewImg.src = pendingImageData;
-    afPreviewName.textContent = `${file.name} → đã nén`;
-    afPreview.style.display = 'block';
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+    for (const file of files) {
+      pendingImagesData.push(await resizeToBase64(file));
+    }
+    afFileInput.value = '';
+    renderAdminThumbs();
   });
 
   connectFolderBtn.addEventListener('click', async () => {

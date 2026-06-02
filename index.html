@@ -142,7 +142,12 @@
   >
     <div class="lightbox-inner">
       <div class="lightbox-img-wrap">
-        <img id="lb-img" src="" alt="" loading="lazy">
+        <div class="lb-slider">
+          <div class="lb-track" id="lb-track"></div>
+          <button class="lb-arrow lb-prev" id="lb-prev" aria-label="Ảnh trước">&#8249;</button>
+          <button class="lb-arrow lb-next" id="lb-next" aria-label="Ảnh sau">&#8250;</button>
+        </div>
+        <div class="lb-dots" id="lb-dots"></div>
         <button class="lightbox-close" id="lb-close" aria-label="Đóng">✕</button>
       </div>
       <div class="lightbox-body">
@@ -247,12 +252,9 @@
           </div>
           <div class="admin-field">
             <label>Ảnh sản phẩm *</label>
-            <label class="file-pick-label" for="af-file-input">📁 Chọn ảnh từ máy</label>
-            <input id="af-file-input" type="file" accept="image/*" style="display:none">
-            <div id="af-preview" class="img-preview" style="display:none">
-              <img id="af-preview-img" src="" alt="preview">
-              <span id="af-preview-name" class="field-hint"></span>
-            </div>
+            <label class="file-pick-label" for="af-file-input">📁 Chọn ảnh (có thể chọn nhiều)</label>
+            <input id="af-file-input" type="file" accept="image/*" multiple style="display:none">
+            <div id="af-thumbnails" class="af-thumbnails"></div>
           </div>
           <div class="admin-field">
             <label for="af-desc">Mô tả *</label>
